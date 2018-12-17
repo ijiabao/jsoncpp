@@ -566,6 +566,48 @@ Json::Value obj_value(Json::objectValue); // {}
   iterator begin();
   iterator end();
 
+  
+  // //////////////////////////////////////////////////////////////////
+  // ijiabao wstring(unicode)/string auto convert for win32 easy used.
+  // //////////////////////////////////////////////////////////////////
+
+  // setup encoding for auto convert, default is CP_UTF8
+  // return old encoding
+  static unsigned int setEncoding(unsigned int encoding = 65001);
+	
+  Value(const wchar_t* value);
+  Value(const wchar_t* begin, const wchar_t* end);
+  Value(const std::wstring& value);
+
+  std::wstring asWString() const;
+  std::wstring toStyledWString() const;
+
+  Value const* find(wchar_t const* begin, wchar_t const* end) const;
+
+  Value& operator[](const wchar_t* key);
+  const Value& operator[](const wchar_t* key) const;
+  Value& operator[](const std::wstring& key);
+  const Value& operator[](const std::wstring& key) const;
+
+  Value get(const wchar_t* key, const Value& defaultValue) const;
+  Value get(const wchar_t* begin,
+            const wchar_t* end,
+            const Value& defaultValue) const;
+  Value get(const std::wstring& key, const Value& defaultValue) const;
+
+  Value removeMember(const wchar_t* key);
+  Value removeMember(const std::wstring& key);
+  bool removeMember(const wchar_t* key, Value* removed);
+  bool removeMember(std::wstring const& key, Value* removed);
+  bool removeMember(const wchar_t* begin, const wchar_t* end, Value* removed);
+
+  void setComment(const wchar_t* comment, CommentPlacement placement);
+  void setComment(const wchar_t* comment, size_t len, CommentPlacement placement);
+  void setComment(const std::wstring& comment, CommentPlacement placement);
+  std::wstring getCommentW(CommentPlacement placement) const;
+
+  // end ijiabao
+
 private:
   void initBasic(ValueType type, bool allocated = false);
 

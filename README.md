@@ -1,3 +1,28 @@
+## Unicode版本注
+
+> MSVC 对于JSON格式的 utf8 / unicode(中文) 转换很耽误事，直接集成在Json::Value对象内方便使用。
+>
+> 如果不转换，使用UTF-8源代码格式其实是更糟糕的体验。(大名鼎鼎的Python核心代码也是使用Unicode兼容)
+>
+> 原始Json对象内部存储仍为多字节字符, 只是把对象的读写做了Unicode转换，默认字符集为UTF-8。
+>
+> 使用独立分支，分支名称带u结尾，不打算pull request
+
+```c++
+Json::Value val = L"测试";	// 赋值Unicode, 内部存储utf-8
+Json::Value root;
+root[L"测试键值"] = L"测试字符";	// 中文键值
+std::wstring v = root[L"测试键值"].asWString();	// 取出unicode字符
+std::wstring text = root.toStyledWString();	// 格式化
+
+// 设置 wstring/string 转换编码(默认utf-8)
+DWORD old_encoding = Json::Value::setEncoding(CP_UTF8)
+```
+
+
+
+以下是原说明文档 https://github.com/open-source-parsers/jsoncpp
+
 Introduction
 ------------
 
@@ -27,7 +52,7 @@ the [amalgamated source](#generating-amalgamated-source-and-header) (a single
 would any other source file. This ensures consistency of compilation flags and
 ABI compatibility, issues which arise when building shared or static 
 libraries. See the next section for instructions.
-  
+
 The `include/` should be added to your compiler include path. Jsoncpp headers
 should be included as follow:
 
